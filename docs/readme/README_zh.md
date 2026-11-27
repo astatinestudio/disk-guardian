@@ -104,14 +104,19 @@
 <a id="download"></a>
 ## 下载
 
-| 系统 | 类型 | x64 | ARM64 | x86（32 位） |
-|---|---|:---:|:---:|:---:|
-| **Windows** 10 / 11 | 安装程序 | [下载](https://github.com/astatinestudio/disk-guardian/releases/latest/download/Disk-Guardian-Windows-Setup-x64.exe) | [下载](https://github.com/astatinestudio/disk-guardian/releases/latest/download/Disk-Guardian-Windows-Setup-arm64.exe) | [下载](https://github.com/astatinestudio/disk-guardian/releases/latest/download/Disk-Guardian-Windows-Setup-x86.exe) |
-| | 便携版（zip） | [下载](https://github.com/astatinestudio/disk-guardian/releases/latest/download/Disk-Guardian-Windows-Portable-x64.zip) | [下载](https://github.com/astatinestudio/disk-guardian/releases/latest/download/Disk-Guardian-Windows-Portable-arm64.zip) | [下载](https://github.com/astatinestudio/disk-guardian/releases/latest/download/Disk-Guardian-Windows-Portable-x86.zip) |
-| **macOS** 10.15+ | 磁盘映像（.dmg） | [Intel](https://github.com/astatinestudio/disk-guardian/releases/latest/download/Disk-Guardian-macOS-x64.dmg) | [Apple silicon](https://github.com/astatinestudio/disk-guardian/releases/latest/download/Disk-Guardian-macOS-aarch64.dmg) | — |
-| **Debian · Ubuntu · Mint** | .deb | [下载](https://github.com/astatinestudio/disk-guardian/releases/latest/download/Disk-Guardian-Linux-amd64.deb) | [下载](https://github.com/astatinestudio/disk-guardian/releases/latest/download/Disk-Guardian-Linux-arm64.deb) | — |
-| **Fedora · openSUSE** | .rpm | [下载](https://github.com/astatinestudio/disk-guardian/releases/latest/download/Disk-Guardian-Linux-x86_64.rpm) | [下载](https://github.com/astatinestudio/disk-guardian/releases/latest/download/Disk-Guardian-Linux-aarch64.rpm) | — |
-| **任意 Linux（Arch、Manjaro 等）** | AppImage（便携版） | [下载](https://github.com/astatinestudio/disk-guardian/releases/latest/download/Disk-Guardian-Linux-x86_64.AppImage) | [下载](https://github.com/astatinestudio/disk-guardian/releases/latest/download/Disk-Guardian-Linux-aarch64.AppImage) | — |
+<table>
+<thead>
+<tr><th>系统</th><th>下载</th><th></th></tr>
+</thead>
+<tbody>
+<tr><td rowspan="2">Windows<br><sub>10 / 11</sub></td><td><a href="https://github.com/astatinestudio/disk-guardian/releases/latest/download/Disk-Guardian-Windows-Setup-x64.exe"><img src="https://img.shields.io/badge/Setup-x64-0550ae" alt="Setup x64"></a><br><a href="https://github.com/astatinestudio/disk-guardian/releases/latest/download/Disk-Guardian-Windows-Setup-arm64.exe"><img src="https://img.shields.io/badge/Setup-ARM64-0969da" alt="Setup ARM64"></a><br><a href="https://github.com/astatinestudio/disk-guardian/releases/latest/download/Disk-Guardian-Windows-Setup-x86.exe"><img src="https://img.shields.io/badge/Setup-x86-218bff" alt="Setup x86"></a></td><td>安装程序</td></tr>
+<tr><td><a href="https://github.com/astatinestudio/disk-guardian/releases/latest/download/Disk-Guardian-Windows-Portable-x64.zip"><img src="https://img.shields.io/badge/Portable-x64-0e7490" alt="Portable x64"></a><br><a href="https://github.com/astatinestudio/disk-guardian/releases/latest/download/Disk-Guardian-Windows-Portable-arm64.zip"><img src="https://img.shields.io/badge/Portable-ARM64-0891b2" alt="Portable ARM64"></a><br><a href="https://github.com/astatinestudio/disk-guardian/releases/latest/download/Disk-Guardian-Windows-Portable-x86.zip"><img src="https://img.shields.io/badge/Portable-x86-06b6d4" alt="Portable x86"></a></td><td>免安装，可从任意文件夹运行</td></tr>
+<tr><td>macOS<br><sub>10.15+</sub></td><td><a href="https://github.com/astatinestudio/disk-guardian/releases/latest/download/Disk-Guardian-macOS-aarch64.dmg"><img src="https://img.shields.io/badge/DMG-Apple%20silicon-24292f?logo=apple&logoColor=white" alt="DMG Apple silicon"></a><br><a href="https://github.com/astatinestudio/disk-guardian/releases/latest/download/Disk-Guardian-macOS-x64.dmg"><img src="https://img.shields.io/badge/DMG-Intel-57606a?logo=apple&logoColor=white" alt="DMG Intel"></a></td><td>Apple silicon（M1 及更新）或 Intel</td></tr>
+<tr><td rowspan="3">Linux</td><td><a href="https://github.com/astatinestudio/disk-guardian/releases/latest/download/Disk-Guardian-Linux-amd64.deb"><img src="https://img.shields.io/badge/DEB-amd64-a80030?logo=debian&logoColor=white" alt="DEB amd64"></a><br><a href="https://github.com/astatinestudio/disk-guardian/releases/latest/download/Disk-Guardian-Linux-arm64.deb"><img src="https://img.shields.io/badge/DEB-ARM64-c4234d?logo=debian&logoColor=white" alt="DEB ARM64"></a></td><td>Debian · Ubuntu · Mint</td></tr>
+<tr><td><a href="https://github.com/astatinestudio/disk-guardian/releases/latest/download/Disk-Guardian-Linux-x86_64.rpm"><img src="https://img.shields.io/badge/RPM-x86__64-294172?logo=fedora&logoColor=white" alt="RPM x86_64"></a><br><a href="https://github.com/astatinestudio/disk-guardian/releases/latest/download/Disk-Guardian-Linux-aarch64.rpm"><img src="https://img.shields.io/badge/RPM-ARM64-3c6eb4?logo=fedora&logoColor=white" alt="RPM ARM64"></a></td><td>Fedora · openSUSE</td></tr>
+<tr><td><a href="https://github.com/astatinestudio/disk-guardian/releases/latest/download/Disk-Guardian-Linux-x86_64.AppImage"><img src="https://img.shields.io/badge/AppImage-x86__64-e36209?logo=linux&logoColor=white" alt="AppImage x86_64"></a><br><a href="https://github.com/astatinestudio/disk-guardian/releases/latest/download/Disk-Guardian-Linux-aarch64.AppImage"><img src="https://img.shields.io/badge/AppImage-ARM64-f0883e?logo=linux&logoColor=white" alt="AppImage ARM64"></a></td><td>任意发行版（Arch、Manjaro 等），便携版</td></tr>
+</tbody>
+</table>
 
 **我该选哪个？**
 
