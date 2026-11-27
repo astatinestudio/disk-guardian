@@ -5,3 +5,9 @@ desktop/src-tauri/linux/* text eol=lf
 *.png binary
 *.ico binary
 *.icns binary
+
+# GitHub language stats: show the project as Rust (the web UI files stay in the repo, just not counted)
+*.js linguist-detectable=false
+*.mjs linguist-detectable=false
+*.css linguist-detectable=false
+*.html linguist-detectable=false
