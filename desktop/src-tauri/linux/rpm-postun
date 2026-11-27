@@ -1,0 +1,16 @@
+#!/bin/sh
+# RPM %postun ($1: 0 = remove, 1 = upgrade)
+if [ "$1" = 0 ]; then
+    for l in /home/*/.local/share/gnome-shell/extensions/disk-guardian@diskguardian \
+             /root/.local/share/gnome-shell/extensions/disk-guardian@diskguardian; do
+        if [ -L "$l" ] && [ "$(readlink "$l")" = /usr/share/gnome-shell/extensions/disk-guardian@diskguardian ]; then
+            rm -f "$l"
+        fi
+    done
+    glib-compile-schemas /usr/share/glib-2.0/schemas >/dev/null 2>&1 || true
+    fc-cache -f >/dev/null 2>&1 || true
+fi
+if [ -d /run/systemd/system ]; then
+    systemctl daemon-reload >/dev/null 2>&1 || true
+fi
+exit 0

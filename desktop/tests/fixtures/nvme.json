@@ -1,0 +1,14 @@
+{"smartctl":{"version":[7,4],"exit_status":0},
+ "device":{"name":"/dev/nvme0","info_name":"/dev/nvme0","type":"nvme","protocol":"NVMe"},
+ "model_name":"BC711 NVMe SK hynix 256GB","serial_number":"CY0AN123456789","firmware_version":"11002111",
+ "nvme_pci_vendor":{"id":7260,"subsystem_id":7260},"nvme_total_capacity":256060514304,"nvme_version":{"string":"1.3","value":66304},
+ "smart_support":{"available":true,"enabled":true},"smart_status":{"passed":true,"nvme":{"value":0}},
+ "nvme_smart_health_information_log":{"critical_warning":0,"temperature":30,"available_spare":100,"available_spare_threshold":5,"percentage_used":1,
+  "data_units_read":20312500,"data_units_written":20312500,"host_reads":300000000,"host_writes":400000000,"controller_busy_time":1200,
+  "power_cycles":874,"power_on_hours":6366,"unsafe_shutdowns":151,"media_errors":0,"num_err_log_entries":12,"warning_temp_time":0,"critical_comp_time":0,
+  "temperature_sensors":[30,32]},
+ "nvme_warning_composite_temperature":84,"nvme_critical_composite_temperature":85,
+ "temperature":{"current":30},"power_cycle_count":874,"power_on_time":{"hours":6366},
+ "nvme_self_test_log":{"current_self_test_operation":{"value":0,"string":"No self-test in progress"},
+  "table":[{"self_test_code":{"value":1,"string":"Short"},"self_test_result":{"value":0,"string":"Completed without error"},"power_on_hours":6000}]}
+}

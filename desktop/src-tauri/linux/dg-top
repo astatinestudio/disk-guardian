@@ -1,0 +1,297 @@
+#!/usr/bin/env python3
+"""
+dg-top — htop-style live view of disk activity (part of Disk Guardian).
+
+  dg-top            your own processes
+  sudo dg-top       every process (per-process I/O needs root)
+
+Keys:  q quit   s sort   a active only / all   r reverse   p pause   +/- interval
+"""
+
+import curses
+import json
+import os
+import re
+import sys
+import time
+
+STATE = "/run/diskguardian/state.json"
+IGNORE = re.compile(r"^(loop|ram|zram|fd|sr|nbd|dm-|md)")
+SORTS = [("io", "I/O rate"), ("read", "read/s"), ("write", "write/s"), ("total", "total I/O"), ("pid", "PID")]
+
+
+def human(n, rate=False):
+    if n is None:
+        return "-"
+    units = ["B", "K", "M", "G", "T", "P"]
+    i = 0
+    n = float(n)
+    while n >= 1000 and i < len(units) - 1:
+        n /= 1000
+        i += 1
+    s = f"{n:.0f}{units[i]}" if n >= 100 or i == 0 else f"{n:.1f}{units[i]}"
+    return s + ("/s" if rate else "")
+
+
+def read_diskstats():
+    out = {}
+    with open("/proc/diskstats") as f:
+        for line in f:
+            p = line.split()
+            if len(p) >= 14 and not IGNORE.match(p[2]):
+                out[p[2]] = [int(x) for x in p[3:14]]
+    return out
+
+
+def whole_disks():
+    try:
+        return sorted(n for n in os.listdir("/sys/block") if not IGNORE.match(n))
+    except OSError:
+        return []
+
+
+def read_state():
+    try:
+        with open(STATE) as f:
+            return {d["name"]: d for d in json.load(f).get("disks", [])}
+    except (OSError, ValueError, KeyError):
+        return {}
+
+
+def read_procs():
+    cur = {}
+    for e in os.listdir("/proc"):
+        if not e.isdigit():
+            continue
+        try:
+            with open(f"/proc/{e}/io", "rb") as f:
+                data = f.read()
+        except OSError:
+            continue
+        rb = wb = 0
+        for line in data.split(b"\n"):
+            if line.startswith(b"read_bytes:"):
+                rb = int(line.split()[1])
+            elif line.startswith(b"write_bytes:"):
+                wb = int(line.split()[1])
+        cur[int(e)] = (rb, wb)
+    return cur
+
+
+_users = {}
+
+
+def proc_info(pid):
+    try:
+        with open(f"/proc/{pid}/cmdline", "rb") as f:
+            cmd = f.read(300).replace(b"\0", b" ").decode("utf-8", "replace").strip()
+        if not cmd:
+            with open(f"/proc/{pid}/comm", "rb") as f:
+                cmd = "[" + f.read().decode("utf-8", "replace").strip() + "]"
+        uid = os.stat(f"/proc/{pid}").st_uid
+    except OSError:
+        return None
+    if uid not in _users:
+        try:
+            import pwd
+            _users[uid] = pwd.getpwuid(uid).pw_name
+        except (KeyError, ImportError):
+            _users[uid] = str(uid)
+    return _users[uid], cmd
+
+
+class App:
+    def __init__(self, scr):
+        self.scr = scr
+        self.interval = 1.0
+        self.sort = 0
+        self.reverse = False
+        self.active_only = True
+        self.paused = False
+        self.prev_disk = read_diskstats()
+        self.prev_proc = read_procs()
+        self.prev_t = time.time()
+        self.state = read_state()
+        self.state_t = time.time()
+        self.disk_rows = []
+        self.proc_rows = []
+        self.totals = (0, 0)
+
+        curses.curs_set(0)
+        scr.nodelay(True)
+        curses.use_default_colors()
+        for i, c in enumerate([curses.COLOR_GREEN, curses.COLOR_YELLOW, curses.COLOR_RED,
+                               curses.COLOR_CYAN, curses.COLOR_BLUE, curses.COLOR_MAGENTA], start=1):
+            curses.init_pair(i, c, -1)
+        curses.init_pair(7, curses.COLOR_BLACK, curses.COLOR_CYAN)
+        curses.init_pair(8, curses.COLOR_BLACK, curses.COLOR_GREEN)
+
+    # ------------------------------------------------------------ sampling
+    def sample(self):
+        now = time.time()
+        dt = max(0.001, now - self.prev_t)
+        cur = read_diskstats()
+        if now - self.state_t > 10:
+            self.state, self.state_t = read_state(), now
+        rows = []
+        tr = tw = 0
+        for n in whole_disks():
+            v, pv = cur.get(n), self.prev_disk.get(n)
+            if not v or not pv:
+                continue
+            dr, dw = v[0] - pv[0], v[4] - pv[4]
+            r = max(0, (v[2] - pv[2]) * 512 / dt)
+            w = max(0, (v[6] - pv[6]) * 512 / dt)
+            tr += r
+            tw += w
+            st = self.state.get(n, {})
+            rows.append({
+                "name": n, "model": st.get("model") or (st.get("raw") or {}).get("model_name") or (st.get("block") or {}).get("model") or "", "r": r, "w": w,
+                "riops": max(0, dr / dt), "wiops": max(0, dw / dt),
+                "util": min(100.0, max(0.0, (v[9] - pv[9]) / (dt * 10))),
+                "ar": (v[3] - pv[3]) / dr if dr > 0 else 0, "aw": (v[7] - pv[7]) / dw if dw > 0 else 0,
+                "queue": max(0, (v[10] - pv[10]) / (dt * 1000)),
+                "temp": (st.get("temperature") or {}).get("current"),
+                "health": (st.get("health") or {}).get("level"),
+            })
+        procs = read_procs()
+        prows = []
+        for pid, (rb, wb) in procs.items():
+            pv = self.prev_proc.get(pid)
+            r = max(0.0, (rb - pv[0]) / dt) if pv else 0.0
+            w = max(0.0, (wb - pv[1]) / dt) if pv else 0.0
+            prows.append({"pid": pid, "r": r, "w": w, "rb": rb, "wb": wb})
+        self.prev_disk, self.prev_proc, self.prev_t = cur, procs, now
+        self.disk_rows, self.proc_rows, self.totals = rows, prows, (tr, tw)
+
+    # ------------------------------------------------------------ drawing
+    def put(self, y, x, text, attr=0):
+        h, w = self.scr.getmaxyx()
+        if 0 <= y < h and x < w:
+            try:
+                self.scr.addnstr(y, x, text, max(0, w - x - 1), attr)
+            except curses.error:
+                pass
+
+    def bar(self, y, x, width, pct, label):
+        fill = int(round(width * pct / 100))
+        color = curses.color_pair(1 if pct < 60 else 2 if pct < 90 else 3)
+        self.put(y, x, "[", curses.A_BOLD)
+        self.put(y, x + 1, "|" * fill, color | curses.A_BOLD)
+        self.put(y, x + 1 + fill, " " * (width - fill))
+        self.put(y, x + 1 + width - len(label), label, curses.A_BOLD)
+        self.put(y, x + 1 + width, "]", curses.A_BOLD)
+
+    def draw(self):
+        scr = self.scr
+        scr.erase()
+        h, w = scr.getmaxyx()
+        tr, tw = self.totals
+        self.put(0, 0, " dg-top ", curses.color_pair(7) | curses.A_BOLD)
+        self.put(0, 11, f"Read {human(tr, True):>9}", curses.color_pair(1) | curses.A_BOLD)
+        self.put(0, 27, f"Write {human(tw, True):>9}", curses.color_pair(2) | curses.A_BOLD)
+        right = time.strftime("%H:%M:%S") + ("  [PAUSED]" if self.paused else "")
+        self.put(0, max(0, w - len(right) - 1), right, curses.A_BOLD)
+
+        y = 2
+        hdr = f"{'DISK':<10}{'MODEL':<22}{'READ/s':>9}{'WRITE/s':>9}{'R-IOPS':>8}{'W-IOPS':>8}  {'BUSY':<20}{'AWAIT r/w ms':>13}{'QUEUE':>7}{'TEMP':>6}"
+        self.put(y, 0, hdr.ljust(w), curses.color_pair(8) | curses.A_BOLD)
+        y += 1
+        for d in self.disk_rows:
+            hc = {"good": 1, "warning": 2, "critical": 3}.get(d["health"], 0)
+            self.put(y, 0, f"{d['name']:<10}", curses.color_pair(hc) | curses.A_BOLD)
+            self.put(y, 10, f"{d['model'][:21]:<22}")
+            self.put(y, 32, f"{human(d['r']):>9}", curses.color_pair(1) if d["r"] else 0)
+            self.put(y, 41, f"{human(d['w']):>9}", curses.color_pair(2) if d["w"] else 0)
+            self.put(y, 50, f"{d['riops']:>8.0f}{d['wiops']:>8.0f}")
+            self.bar(y, 68, 17, d["util"], f"{d['util']:.0f}%")
+            self.put(y, 88, f"{d['ar']:>6.1f}/{d['aw']:<6.1f}{d['queue']:>7.2f}")
+            t = d["temp"]
+            self.put(y, 108, f"{t:>4}°C" if isinstance(t, (int, float)) else f"{'-':>6}",
+                     curses.color_pair(1 if not isinstance(t, (int, float)) or t < 50 else 2 if t < 60 else 3))
+            y += 1
+
+        y += 1
+        key = SORTS[self.sort][0]
+        rows = [p for p in self.proc_rows if not self.active_only or p["r"] or p["w"]]
+        sortkey = {
+            "io": lambda p: p["r"] + p["w"], "read": lambda p: p["r"], "write": lambda p: p["w"],
+            "total": lambda p: p["rb"] + p["wb"], "pid": lambda p: -p["pid"],
+        }[key]
+        rows.sort(key=sortkey, reverse=not self.reverse)
+        title = (f"{'PID':>8} {'USER':<12}{'READ/s':>10}{'WRITE/s':>10}{'TOTAL RD':>10}{'TOTAL WR':>10}  COMMAND"
+                 f"   (sort: {SORTS[self.sort][1]}{', reversed' if self.reverse else ''}; "
+                 f"{'active' if self.active_only else 'all'} {len(rows)}/{len(self.proc_rows)})")
+        self.put(y, 0, title.ljust(w), curses.color_pair(8) | curses.A_BOLD)
+        y += 1
+        footer_y = h - 1
+        for p in rows:
+            if y >= footer_y - (1 if os.geteuid() != 0 else 0):
+                break
+            info = proc_info(p["pid"])
+            if not info:
+                continue
+            user, cmd = info
+            attr = curses.A_BOLD if p["r"] or p["w"] else curses.A_DIM
+            self.put(y, 0, f"{p['pid']:>8} {user[:11]:<12}", attr)
+            self.put(y, 21, f"{human(p['r'], True):>10}", curses.color_pair(1) | attr if p["r"] else attr)
+            self.put(y, 31, f"{human(p['w'], True):>10}", curses.color_pair(2) | attr if p["w"] else attr)
+            self.put(y, 41, f"{human(p['rb']):>10}{human(p['wb']):>10}  {cmd}", attr)
+            y += 1
+        if not rows:
+            self.put(y, 2, "No process is reading or writing right now  (press a to show all)", curses.A_DIM)
+        if os.geteuid() != 0:
+            self.put(footer_y - 1, 0, " Only your own processes are listed. Run  sudo dg-top  to see every process. ",
+                     curses.color_pair(2))
+        keys = [("q", "Quit"), ("s", "Sort"), ("r", "Reverse"), ("a", "All/Active"), ("p", "Pause"), ("+/-", "Interval")]
+        x = 0
+        for k, label in keys:
+            self.put(footer_y, x, k, curses.A_BOLD)
+            self.put(footer_y, x + len(k), label + " ", curses.color_pair(7))
+            x += len(k) + len(label) + 2
+        self.put(footer_y, x + 1, f"{self.interval:.1f}s", curses.A_DIM)
+        scr.refresh()
+
+    def run(self):
+        next_t = 0
+        while True:
+            now = time.time()
+            if now >= next_t:
+                if not self.paused:
+                    self.sample()
+                self.draw()
+                next_t = now + self.interval
+            ch = self.scr.getch()
+            if ch in (ord("q"), ord("Q"), 27):
+                return
+            if ch == ord("s"):
+                self.sort = (self.sort + 1) % len(SORTS)
+            elif ch == ord("r"):
+                self.reverse = not self.reverse
+            elif ch == ord("a"):
+                self.active_only = not self.active_only
+            elif ch == ord("p"):
+                self.paused = not self.paused
+            elif ch in (ord("+"), ord("=")):
+                self.interval = min(10.0, self.interval + 0.5)
+            elif ch == ord("-"):
+                self.interval = max(0.5, self.interval - 0.5)
+            elif ch == curses.KEY_RESIZE:
+                pass
+            else:
+                time.sleep(0.05)
+                continue
+            self.draw()
+
+
+def main():
+    if not os.path.exists("/proc/diskstats"):
+        sys.exit("dg-top needs Linux (/proc/diskstats)")
+    try:
+        curses.wrapper(lambda scr: App(scr).run())
+    except KeyboardInterrupt:
+        pass
+
+
+if __name__ == "__main__":
+    main()

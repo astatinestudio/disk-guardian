@@ -1,0 +1,308 @@
+/* ================================================================ Disk Guardian */
+
+/* ---------- level colors */
+.lh-text-good, .lh-temp-ok { color: #57e389; }
+.lh-text-ok { color: #57e389; }
+.lh-text-warning, .lh-text-warn, .lh-temp-warn { color: #f8c33c; }
+.lh-text-critical, .lh-text-crit, .lh-temp-crit { color: #ff7b7b; }
+.lh-text-unknown, .lh-temp-unknown { color: inherit; }
+
+/* ---------- panel */
+.lh-panel-box { spacing: 6px; }
+.lh-panel-temps { spacing: 8px; }
+.lh-panel-item { spacing: 3px; }
+.lh-panel-name { font-size: 0.85em; color: rgba(255, 255, 255, 0.65); }
+.lh-panel-temp { font-weight: bold; font-feature-settings: "tnum"; }
+.lh-panel-icon-warning { color: #f8c33c; }
+.lh-panel-icon-critical { color: #ff7b7b; }
+.lh-panel-icon-unknown { color: rgba(255, 255, 255, 0.55); }
+
+/* ---------- popup menu */
+.lh-menu { min-width: 400px; }
+
+.lh-header { padding: 6px 12px 10px 12px; spacing: 6px; }
+.lh-header:hover, .lh-header:focus { background-color: transparent; }
+.lh-header-title { font-size: 1.15em; font-weight: 800; }
+.lh-header-sub { font-size: 0.85em; color: rgba(255, 255, 255, 0.55); }
+
+.lh-icon-button {
+  border-radius: 99px;
+  padding: 6px;
+  margin: 0 2px;
+}
+.lh-icon-button:hover { background-color: rgba(255, 255, 255, 0.1); }
+.lh-icon-button:active { background-color: rgba(255, 255, 255, 0.18); }
+.lh-icon-button-icon { icon-size: 16px; }
+.lh-star-good .lh-icon-button-icon { color: #f8c33c; }
+
+.lh-notice {
+  margin: 4px 8px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background-color: rgba(248, 195, 60, 0.14);
+  spacing: 10px;
+}
+.lh-notice:hover { background-color: rgba(248, 195, 60, 0.14); }
+.lh-notice-icon { icon-size: 20px; color: #f8c33c; }
+.lh-notice-title { font-weight: bold; }
+.lh-notice-body { font-size: 0.85em; color: rgba(255, 255, 255, 0.7); font-family: monospace; }
+
+.lh-card {
+  margin: 3px 6px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  spacing: 12px;
+  background-color: rgba(255, 255, 255, 0.04);
+}
+.lh-card:hover, .lh-card:focus { background-color: rgba(255, 255, 255, 0.1); }
+.lh-card-icon { icon-size: 32px; color: rgba(255, 255, 255, 0.85); }
+.lh-card-main { spacing: 4px; }
+.lh-card-top { spacing: 6px; }
+.lh-card-title { font-weight: bold; }
+.lh-card-sub { spacing: 6px; }
+.lh-card-subtext { font-size: 0.85em; color: rgba(255, 255, 255, 0.6); }
+.lh-card-stats { spacing: 14px; padding-top: 2px; }
+.lh-card-health { spacing: 8px; min-width: 150px; }
+.lh-card-score { font-size: 0.85em; font-weight: bold; }
+.lh-card-stat { spacing: 4px; }
+.lh-card-stat-icon { icon-size: 14px; color: rgba(255, 255, 255, 0.6); }
+.lh-card-temp { font-weight: bold; font-feature-settings: "tnum"; }
+.lh-card-hours { font-size: 0.9em; color: rgba(255, 255, 255, 0.8); font-feature-settings: "tnum"; }
+
+/* ---------- badges */
+.lh-badge {
+  font-size: 0.75em;
+  font-weight: bold;
+  padding: 1px 7px;
+  border-radius: 99px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.lh-badge-kind { background-color: rgba(98, 160, 234, 0.25); color: #99c1f1; }
+.lh-badge-good { background-color: rgba(87, 227, 137, 0.18); color: #57e389; }
+.lh-badge-warning { background-color: rgba(248, 195, 60, 0.2); color: #f8c33c; }
+.lh-badge-critical { background-color: rgba(255, 123, 123, 0.22); color: #ff7b7b; }
+.lh-badge-unknown { background-color: rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.7); }
+.lh-badges { spacing: 6px; padding-top: 4px; }
+
+/* ---------- bars */
+.lh-bar {
+  height: 6px;
+  border-radius: 99px;
+  background-color: rgba(255, 255, 255, 0.12);
+}
+.lh-bar-fill { border-radius: 99px; background-color: #62a0ea; }
+.lh-fill-good, .lh-fill-ok { background-color: #57e389; }
+.lh-fill-warning, .lh-fill-warn { background-color: #f8c33c; }
+.lh-fill-critical, .lh-fill-crit { background-color: #ff7b7b; }
+.lh-fill-unknown { background-color: rgba(255, 255, 255, 0.3); }
+
+/* ---------- ring */
+.lh-ring-label { font-size: 1.15em; font-weight: 800; font-feature-settings: "tnum"; }
+.lh-ring-big-label { font-size: 1.35em; font-weight: 800; font-feature-settings: "tnum"; }
+
+/* ---------- details dialog */
+.lh-dialog .modal-dialog-content-box { padding: 0; margin: 0; }
+.lh-dialog-root { width: 780px; spacing: 12px; padding: 20px 22px 6px 22px; }
+
+.lh-dlg-header { spacing: 16px; }
+.lh-dlg-icon { icon-size: 48px; }
+.lh-dlg-title { font-size: 1.4em; font-weight: 800; }
+.lh-dlg-ringbox { spacing: 4px; }
+.lh-dlg-level { font-size: 0.85em; font-weight: bold; }
+
+.lh-tabs {
+  spacing: 4px;
+  padding: 4px;
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.06);
+}
+.lh-tab {
+  padding: 7px 10px;
+  border-radius: 9px;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.7);
+}
+.lh-tab:hover { background-color: rgba(255, 255, 255, 0.08); color: #fff; }
+.lh-tab:checked { background-color: rgba(255, 255, 255, 0.16); color: #fff; }
+
+.lh-dlg-scroll { height: 470px; }
+.lh-dlg-content { spacing: 14px; padding: 4px 8px 12px 2px; }
+
+.lh-section {
+  spacing: 6px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background-color: rgba(255, 255, 255, 0.04);
+}
+.lh-section-title { font-weight: 800; padding-bottom: 4px; }
+.lh-muted { font-size: 0.85em; color: rgba(255, 255, 255, 0.55); }
+.lh-empty { color: rgba(255, 255, 255, 0.55); padding: 12px 0; }
+
+.lh-issue { spacing: 10px; padding: 8px 10px; border-radius: 10px; }
+.lh-issue-icon { icon-size: 16px; }
+.lh-issue-good { background-color: rgba(87, 227, 137, 0.12); }
+.lh-issue-good .lh-issue-icon { color: #57e389; }
+.lh-issue-critical { background-color: rgba(255, 123, 123, 0.16); }
+.lh-issue-critical .lh-issue-icon { color: #ff7b7b; }
+.lh-issue-warning { background-color: rgba(248, 195, 60, 0.14); }
+.lh-issue-warning .lh-issue-icon { color: #f8c33c; }
+.lh-issue-info { background-color: rgba(98, 160, 234, 0.12); }
+.lh-issue-info .lh-issue-icon { color: #99c1f1; }
+
+.lh-tiles { spacing: 10px; }
+.lh-tiles-row { spacing: 10px; }
+.lh-tile {
+  spacing: 2px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background-color: rgba(255, 255, 255, 0.06);
+  min-width: 150px;
+}
+.lh-tile-head { spacing: 6px; }
+.lh-tile-icon { icon-size: 14px; color: rgba(255, 255, 255, 0.6); }
+.lh-tile-caption { font-size: 0.8em; color: rgba(255, 255, 255, 0.6); }
+.lh-tile-value { font-size: 1.35em; font-weight: 800; font-feature-settings: "tnum"; }
+.lh-tile-sub { font-size: 0.8em; color: rgba(255, 255, 255, 0.55); }
+
+.lh-spark-big { height: 90px; }
+.lh-temp-stats { spacing: 8px; padding-top: 4px; }
+.lh-temp-stat { spacing: 0; }
+.lh-temp-stat-cap { font-size: 0.8em; color: rgba(255, 255, 255, 0.55); }
+.lh-temp-stat-val { font-weight: bold; font-feature-settings: "tnum"; }
+
+.lh-kv { spacing: 12px; padding: 3px 0; }
+.lh-kv-key { color: rgba(255, 255, 255, 0.65); }
+.lh-kv-value { font-weight: bold; font-feature-settings: "tnum"; }
+
+/* table */
+.lh-trow { spacing: 6px; padding: 4px 6px; border-radius: 6px; }
+.lh-trow:hover { background-color: rgba(255, 255, 255, 0.05); }
+.lh-thead { font-size: 0.8em; font-weight: bold; color: rgba(255, 255, 255, 0.55); }
+.lh-trow-warn { background-color: rgba(248, 195, 60, 0.08); }
+.lh-trow-failing { background-color: rgba(255, 123, 123, 0.12); }
+.lh-cell { font-feature-settings: "tnum"; }
+.lh-c-id { width: 36px; }
+.lh-c-name { width: 240px; }
+.lh-c-num { width: 62px; }
+.lh-c-raw { width: 150px; }
+.lh-c-status { width: 70px; }
+.lh-c-ttype { width: 200px; }
+.lh-c-tresult { width: 320px; }
+
+/* charts */
+.lh-chart { spacing: 4px; height: 160px; padding-top: 6px; }
+.lh-chart-col { spacing: 3px; }
+.lh-chart-bar { width: 22px; border-radius: 5px 5px 2px 2px; background-color: #62a0ea; }
+.lh-chart-val { font-size: 0.7em; color: rgba(255, 255, 255, 0.7); }
+.lh-chart-date { font-size: 0.7em; color: rgba(255, 255, 255, 0.5); }
+
+/* tests */
+.lh-test-running { spacing: 6px; padding: 10px; border-radius: 10px; background-color: rgba(98, 160, 234, 0.12); }
+.lh-test-running-title { font-weight: bold; }
+.lh-test-buttons { spacing: 8px; padding: 6px 0; }
+.lh-button {
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-weight: bold;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.lh-button:hover { background-color: rgba(255, 255, 255, 0.16); }
+.lh-button:active { background-color: rgba(255, 255, 255, 0.22); }
+.lh-button:insensitive { color: rgba(255, 255, 255, 0.35); background-color: rgba(255, 255, 255, 0.04); }
+
+/* file systems */
+.lh-fs { spacing: 5px; padding: 8px 0; }
+.lh-fs-top { spacing: 8px; }
+.lh-fs-mount { font-weight: bold; }
+
+/* ---------- floating widget */
+.lh-float {
+  width: 300px;
+  padding: 12px 14px;
+  spacing: 10px;
+  border-radius: 20px;
+  color: #ffffff;
+  background-color: rgba(30, 30, 34, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+.lh-float:hover { border-color: rgba(255, 255, 255, 0.18); }
+.lh-float:dragging { border-color: rgba(98, 160, 234, 0.7); }
+.lh-float-compact { width: 260px; padding: 8px 12px; spacing: 6px; }
+
+.lh-float-header { spacing: 8px; }
+.lh-float-icon { icon-size: 26px; color: rgba(255, 255, 255, 0.85); }
+.lh-float-title { font-weight: 800; }
+.lh-float-sub { font-size: 0.8em; color: rgba(255, 255, 255, 0.55); }
+.lh-float-buttons { spacing: 0; }
+.lh-float-button { border-radius: 99px; padding: 4px; }
+.lh-float-button .lh-icon-button-icon { icon-size: 14px; color: rgba(255, 255, 255, 0.6); }
+.lh-float-button:hover { background-color: rgba(255, 255, 255, 0.12); }
+.lh-float-button:hover .lh-icon-button-icon { color: #fff; }
+
+.lh-float-hero { spacing: 14px; }
+.lh-float-ringbox { spacing: 2px; }
+.lh-float-level { font-size: 0.8em; font-weight: bold; }
+.lh-float-tempbox { spacing: 0; }
+.lh-float-cap { font-size: 0.8em; color: rgba(255, 255, 255, 0.6); padding: 0 4px; }
+.lh-float-cap-icon { icon-size: 12px; color: rgba(255, 255, 255, 0.6); }
+.lh-float-temp { font-size: 2.2em; font-weight: 800; font-feature-settings: "tnum"; }
+.lh-float-minmax { font-size: 0.75em; color: rgba(255, 255, 255, 0.55); }
+.lh-spark { height: 46px; }
+
+.lh-float-list { spacing: 0; }
+.lh-float-list .lh-kv { padding: 2px 0; font-size: 0.9em; }
+.lh-float-issue { font-size: 0.85em; }
+
+.lh-float-toggle {
+  padding: 6px;
+  border-radius: 10px;
+  font-size: 0.85em;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.75);
+  background-color: rgba(255, 255, 255, 0.06);
+}
+.lh-float-toggle:hover { background-color: rgba(255, 255, 255, 0.12); color: #fff; }
+.lh-float-scroll { max-height: 260px; }
+.lh-float-all .lh-kv { font-size: 0.8em; padding: 1px 0; }
+
+.lh-float-compact-row { spacing: 10px; }
+.lh-float-temp-small { font-size: 1.3em; font-weight: 800; font-feature-settings: "tnum"; }
+.lh-float-health-small { font-weight: bold; font-size: 0.9em; }
+.lh-float-hours-small { font-size: 0.85em; color: rgba(255, 255, 255, 0.6); }
+.lh-float-empty { color: rgba(255, 255, 255, 0.7); padding: 6px 0; }
+
+/* ---------- partitions */
+.lh-partbar { height: 40px; }
+.lh-partbar-small { height: 22px; }
+.lh-partlegend { spacing: 4px; }
+.lh-partrow { spacing: 8px; padding: 2px 0; }
+.lh-partrow-detailed { spacing: 10px; padding: 8px 0; }
+.lh-swatch { width: 10px; height: 10px; border-radius: 3px; }
+.lh-partrow-detailed .lh-swatch { width: 14px; height: 14px; border-radius: 4px; }
+.lh-part-title { font-weight: bold; }
+.lh-part-title-small { font-size: 0.85em; font-weight: bold; }
+.lh-part-sub { font-size: 0.75em; color: rgba(255, 255, 255, 0.55); }
+.lh-part-pct { font-size: 0.8em; font-weight: bold; font-feature-settings: "tnum"; }
+.lh-float-parthead { spacing: 6px; padding-top: 2px; }
+
+/* ---------- Persian: font + right-to-left
+ * .lh-fa  : Persian font on the panel item, popup menu, floating widget and dialog.
+ *           Uses Vazirmatn installed system wide (the Linux packages put it in
+ *           /usr/share/fonts/truetype/diskguardian); otherwise the
+ *           next family in the list is used.
+ * .lh-rtl : set together with the RTL text direction (widgets.js localize()).
+ *           Clutter picks each label's base direction from its own text, so Persian
+ *           text would still be left aligned inside wide labels: align it explicitly. */
+.lh-fa { font-family: "Vazirmatn", "Vazir", "Noto Sans Arabic", sans-serif; }
+.lh-fa .lh-notice-body { font-family: monospace; }
+
+.lh-rtl StLabel { text-align: right; }
+.lh-rtl StButton StLabel,
+.lh-rtl .lh-ring-label,
+.lh-rtl .lh-ring-big-label,
+.lh-rtl .lh-chart-val,
+.lh-rtl .lh-chart-date { text-align: center; }
+
+/* the scroll bar moves to the left side in RTL */
+.lh-rtl .lh-dlg-content { padding: 4px 2px 12px 8px; }

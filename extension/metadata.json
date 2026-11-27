@@ -1,0 +1,15 @@
+{
+  "uuid": "disk-guardian@diskguardian",
+  "name": "Disk Guardian",
+  "description": "Health, SMART data, power-on hours and live temperature of every disk (HDD, SSD, NVMe, SAS, USB) with btrfs error tracking. Panel temperatures, a floating widget and alerts.\n\nRequires the Disk Guardian collector service (disk-guardian package, see README).",
+  "shell-version": [
+    "45",
+    "46",
+    "47",
+    "48",
+    "49",
+    "50"
+  ],
+  "settings-schema": "org.gnome.shell.extensions.diskguardian",
+  "version-name": "1.5.0"
+}

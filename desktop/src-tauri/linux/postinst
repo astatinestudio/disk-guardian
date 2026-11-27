@@ -1,0 +1,38 @@
+#!/bin/sh
+set -e
+UUID=disk-guardian@diskguardian
+
+if [ "$1" = "configure" ]; then
+    # Per-user copies of the extension would shadow the packaged one. Replace them with
+    # a link to the system copy (the running session keeps using that path until logout).
+    SYS=/usr/share/gnome-shell/extensions/$UUID
+    for d in /home/*/.local/share/gnome-shell/extensions/$UUID /root/.local/share/gnome-shell/extensions/$UUID; do
+        if [ -d "$d" ] && [ ! -L "$d" ]; then
+            echo "Disk Guardian: replacing old per-user extension copy $d with a link to $SYS"
+            rm -rf "$d"
+            ln -s "$SYS" "$d"
+        fi
+    done
+
+    modprobe drivetemp >/dev/null 2>&1 || true
+    glib-compile-schemas /usr/share/glib-2.0/schemas >/dev/null 2>&1 || true
+    fc-cache -f /usr/share/fonts/truetype/diskguardian >/dev/null 2>&1 || true
+
+    if [ -d /run/systemd/system ]; then
+        systemctl daemon-reload >/dev/null 2>&1 || true
+        systemctl enable disk-guardian.service >/dev/null 2>&1 || true
+        systemctl restart disk-guardian.service >/dev/null 2>&1 || \
+            echo "Disk Guardian: the collector did not start, see: journalctl -u disk-guardian"
+    fi
+
+    cat <<MSG
+
+  Disk Guardian is installed.
+  * Open "Disk Guardian" from the applications menu.
+  * Log out and back in once to show disk temperatures in the top panel (GNOME).
+  * Refresh / self-test buttons work for administrators (group "sudo")
+    (see /etc/diskguardian/collector.conf).
+
+MSG
+fi
+exit 0

@@ -1,0 +1,6 @@
+# build outputs
+dist/
+# signed release files (scripts/release.mjs pack), uploaded to GitHub Releases
+release/
+# never commit the update signing key
+*.pem

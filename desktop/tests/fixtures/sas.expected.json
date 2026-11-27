@@ -1,0 +1,99 @@
+{
+  "protocol": "SCSI",
+  "dev_type": "scsi",
+  "model": "SEAGATE ST4000NM0023",
+  "model_family": null,
+  "vendor": "SEAGATE",
+  "serial": "Z1Z0ABCD",
+  "firmware": "GS0F",
+  "capacity": 4000787030016,
+  "rotation_rate": 7200,
+  "form_factor": null,
+  "sata_version": null,
+  "link_speed": null,
+  "max_link_speed": null,
+  "nvme_version": null,
+  "transport": "SAS (SPL-4)",
+  "smart": {
+    "available": true,
+    "enabled": true,
+    "passed": true,
+    "error": null,
+    "standby": false
+  },
+  "power_on_hours": 52000,
+  "power_cycles": 88,
+  "attributes": [],
+  "nvme": null,
+  "scsi": {
+    "grown_defects": 12,
+    "read": {
+      "corrected": 100,
+      "uncorrected": 0,
+      "gigabytes": "350123.456"
+    },
+    "write": {
+      "corrected": 0,
+      "uncorrected": 2,
+      "gigabytes": "120000.5"
+    },
+    "verify": {
+      "corrected": 5,
+      "uncorrected": 0,
+      "gigabytes": "0.000"
+    },
+    "start_stop_cycles": 88,
+    "load_unload_cycles": 300,
+    "specified_start_stop": 10000
+  },
+  "counters": {
+    "grown_defects": 12,
+    "scsi_uncorrected": 2
+  },
+  "life_remaining": null,
+  "life_source": null,
+  "data_written": 120000500000000,
+  "data_read": 350123456000000,
+  "data_approx": false,
+  "self_tests": [
+    {
+      "type": "Background short",
+      "status": "Completed",
+      "passed": true,
+      "hours": 51000
+    }
+  ],
+  "self_test": {
+    "running": false,
+    "text": null,
+    "remaining": null
+  },
+  "temperature": {
+    "current": 41,
+    "lifetime_max": null,
+    "lifetime_min": null,
+    "warn_limit": null,
+    "crit_limit": 68
+  },
+  "kind": "sas",
+  "health": {
+    "score": 76,
+    "level": "warning",
+    "issues": [
+      {
+        "severity": "warning",
+        "code": "grown_defects",
+        "params": {
+          "count": 12
+        }
+      },
+      {
+        "severity": "warning",
+        "code": "scsi_uncorrected",
+        "params": {
+          "count": 2
+        }
+      }
+    ]
+  }
+}

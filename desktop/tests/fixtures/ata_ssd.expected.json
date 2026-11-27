@@ -1,0 +1,167 @@
+{
+  "protocol": "ATA",
+  "dev_type": "sat",
+  "model": "Samsung SSD 870 EVO 500GB",
+  "model_family": "Samsung based SSDs",
+  "vendor": null,
+  "serial": "S6PXNM0T123456",
+  "firmware": "SVT02B6Q",
+  "capacity": 500107862016,
+  "rotation_rate": 0,
+  "form_factor": "2.5 inches",
+  "sata_version": "SATA 3.3",
+  "link_speed": "6.0 Gb/s",
+  "max_link_speed": "6.0 Gb/s",
+  "nvme_version": null,
+  "transport": null,
+  "smart": {
+    "available": true,
+    "enabled": true,
+    "passed": true,
+    "error": null,
+    "standby": false
+  },
+  "power_on_hours": 12034,
+  "power_cycles": 1520,
+  "attributes": [
+    {
+      "id": 5,
+      "name": "Reallocated_Sector_Ct",
+      "value": 100,
+      "worst": 100,
+      "thresh": 10,
+      "raw": "3",
+      "raw_value": 3,
+      "when_failed": null,
+      "prefail": true,
+      "status": "warn"
+    },
+    {
+      "id": 9,
+      "name": "Power_On_Hours",
+      "value": 97,
+      "worst": 97,
+      "thresh": 0,
+      "raw": "12034",
+      "raw_value": 12034,
+      "when_failed": null,
+      "prefail": false,
+      "status": "ok"
+    },
+    {
+      "id": 12,
+      "name": "Power_Cycle_Count",
+      "value": 99,
+      "worst": 99,
+      "thresh": 0,
+      "raw": "1520",
+      "raw_value": 1520,
+      "when_failed": null,
+      "prefail": false,
+      "status": "ok"
+    },
+    {
+      "id": 177,
+      "name": "Wear_Leveling_Count",
+      "value": 92,
+      "worst": 92,
+      "thresh": 0,
+      "raw": "81",
+      "raw_value": 81,
+      "when_failed": null,
+      "prefail": true,
+      "status": "ok"
+    },
+    {
+      "id": 192,
+      "name": "Power-Off_Retract_Count",
+      "value": 99,
+      "worst": 99,
+      "thresh": 0,
+      "raw": "100",
+      "raw_value": 4294967396,
+      "when_failed": null,
+      "prefail": false,
+      "status": "ok"
+    },
+    {
+      "id": 199,
+      "name": "UDMA_CRC_Error_Count",
+      "value": 100,
+      "worst": 100,
+      "thresh": 0,
+      "raw": "12",
+      "raw_value": 12,
+      "when_failed": null,
+      "prefail": false,
+      "status": "info"
+    },
+    {
+      "id": 241,
+      "name": "Total_LBAs_Written",
+      "value": 99,
+      "worst": 99,
+      "thresh": 0,
+      "raw": "45211786543",
+      "raw_value": 45211786543,
+      "when_failed": null,
+      "prefail": false,
+      "status": "ok"
+    }
+  ],
+  "nvme": null,
+  "scsi": null,
+  "counters": {
+    "reallocated": 3,
+    "power_cycles_attr": 1520,
+    "unsafe_shutdowns": 100,
+    "crc_errors": 12,
+    "error_log_entries": 0
+  },
+  "life_remaining": 93,
+  "life_source": "devstat",
+  "data_written": 23148434710016,
+  "data_read": 15462456945664,
+  "data_approx": false,
+  "self_tests": [
+    {
+      "type": "Short offline",
+      "status": "Completed without error",
+      "passed": true,
+      "hours": 11980
+    }
+  ],
+  "self_test": {
+    "running": false,
+    "text": null,
+    "remaining": null
+  },
+  "temperature": {
+    "current": 34,
+    "lifetime_max": 61,
+    "lifetime_min": 18,
+    "warn_limit": null,
+    "crit_limit": null
+  },
+  "kind": "ssd",
+  "health": {
+    "score": 88,
+    "level": "warning",
+    "issues": [
+      {
+        "severity": "warning",
+        "code": "reallocated",
+        "params": {
+          "count": 3
+        }
+      },
+      {
+        "severity": "info",
+        "code": "crc_errors",
+        "params": {
+          "count": 12
+        }
+      }
+    ]
+  }
+}

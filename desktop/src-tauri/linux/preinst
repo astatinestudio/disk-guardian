@@ -1,0 +1,23 @@
+#!/bin/sh
+# Disk Guardian replaces the packages of its former names ("disk-health", and the older
+# "linuxhealth" with the Python collector) and manual installs done with the old
+# install.sh (files under /usr/local).
+set -e
+if [ "$1" = "install" ] || [ "$1" = "upgrade" ]; then
+    if [ -d /run/systemd/system ]; then
+        systemctl disable --now linuxhealth-collector.service >/dev/null 2>&1 || true
+        systemctl disable --now disk-health.service >/dev/null 2>&1 || true
+    fi
+    # unit written by "disk-health --install-service" (install without the package)
+    rm -f /etc/systemd/system/disk-health.service
+    OLD=/etc/systemd/system/linuxhealth-collector.service
+    if [ -f "$OLD" ] && grep -q /usr/local/lib/linuxhealth "$OLD"; then
+        echo "Disk Guardian: removing the previous manual installation (install.sh)..."
+        rm -f "$OLD" /usr/local/sbin/linuxhealth-collector /etc/modules-load.d/linuxhealth-drivetemp.conf
+        rm -rf /usr/local/lib/linuxhealth /usr/local/share/doc/linuxhealth
+        if [ -d /run/systemd/system ]; then
+            systemctl daemon-reload || true
+        fi
+    fi
+fi
+exit 0

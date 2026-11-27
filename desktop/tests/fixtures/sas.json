@@ -1,0 +1,14 @@
+{"smartctl":{"version":[7,4],"exit_status":0},
+ "device":{"name":"/dev/sdc","info_name":"/dev/sdc","type":"scsi","protocol":"SCSI"},
+ "scsi_vendor":"SEAGATE","scsi_product":"ST4000NM0023","scsi_revision":"GS0F","serial_number":"Z1Z0ABCD",
+ "user_capacity":{"blocks":7814037168,"bytes":4000787030016},"logical_block_size":512,"rotation_rate":7200,
+ "scsi_transport_protocol":{"name":"SAS (SPL-4)","value":6},
+ "smart_status":{"passed":true},"temperature":{"current":41,"drive_trip":68},
+ "power_on_time":{"hours":52000,"minutes":12},
+ "scsi_grown_defect_list":12,
+ "scsi_error_counter_log":{"read":{"errors_corrected_by_eccfast":1,"total_errors_corrected":100,"total_uncorrected_errors":0,"gigabytes_processed":"350123.456"},
+  "write":{"total_errors_corrected":0,"total_uncorrected_errors":2,"gigabytes_processed":"120000.5"},
+  "verify":{"total_errors_corrected":5,"total_uncorrected_errors":0,"gigabytes_processed":"0.000"}},
+ "scsi_start_stop_cycle_counter":{"specified_cycle_count_over_device_lifetime":10000,"accumulated_start_stop_cycles":88,"accumulated_load_unload_cycles":300},
+ "scsi_self_test_0":{"code":{"value":1,"string":"Background short"},"result":{"value":0,"string":"Completed"},"power_on_time":{"hours":51000}}
+}

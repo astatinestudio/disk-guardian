@@ -1,0 +1,203 @@
+# Builds Disk Guardian for every platform; a tag "v*" also publishes the release.
+#
+#   Windows  x64 · x86 · ARM64     NSIS installer + portable zip
+#   macOS    Apple silicon · Intel .dmg + .app.tar.gz (self-updater)
+#   Linux    x64 · ARM64            .deb · .rpm · .AppImage (portable)
+#
+# Release: push a tag that matches the version in tauri.conf.json (git tag v1.6.0 && git push --tags).
+# The "release" job signs SHA256SUMS.txt with the UPDATE_SIGNING_KEY secret (the PEM file made by
+# scripts/release.mjs keygen), publishes the GitHub release and commits updates.json to main,
+# which tells installed apps about the new version.
+# Optional release notes: release-notes/v1.6.0.json  {"en": "...", "fa": "...", "mandatory": false}
+name: desktop
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+    paths-ignore: ['**.md', 'docs/**', 'updates.json', 'release-notes/**']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: SMART analysis (extension/lib/normalize.js)
+        run: node --test desktop/tests/normalize.test.mjs
+      - name: Translations complete
+        run: node desktop/scripts/check-locales.mjs
+
+  build:
+    needs: test
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {name: windows-x64,   os: windows-latest,   target: x86_64-pc-windows-msvc,    bundles: nsis, arch: x64}
+          - {name: windows-x86,   os: windows-latest,   target: i686-pc-windows-msvc,      bundles: nsis, arch: x86}
+          - {name: windows-arm64, os: windows-latest,   target: aarch64-pc-windows-msvc,   bundles: nsis, arch: arm64}
+          - {name: macos-arm64,   os: macos-latest,     target: aarch64-apple-darwin,      bundles: 'app,dmg', arch: aarch64}
+          - {name: macos-x64,     os: macos-15-intel,   target: x86_64-apple-darwin,       bundles: 'app,dmg', arch: x64}
+          - {name: linux-x64,     os: ubuntu-22.04,     target: x86_64-unknown-linux-gnu,  bundles: 'deb,rpm,appimage', arch: x64}
+          - {name: linux-arm64,   os: ubuntu-22.04-arm, target: aarch64-unknown-linux-gnu, bundles: 'deb,rpm,appimage', arch: arm64}
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: desktop
+        shell: bash
+    env:
+      BUNDLE: src-tauri/target/${{ matrix.target }}/release/bundle
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: desktop/package-lock.json
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: desktop/src-tauri
+          key: ${{ matrix.target }}
+
+      - name: Linux build dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libayatana-appindicator3-dev librsvg2-dev patchelf file libfuse2
+          chmod +x src-tauri/linux/dg-top src-tauri/linux/p* src-tauri/linux/rpm-*
+
+      # smartctl (smartmontools, GPL-2.0) ships next to disk-guardian as a separate program:
+      # scripts/fetch-smartctl.mjs (beforeBuildCommand) downloads the official Windows build,
+      # or copies the Homebrew one on macOS. Linux packages depend on smartmontools instead.
+      - name: smartmontools (macOS)
+        if: runner.os == 'macOS'
+        run: brew install smartmontools
+
+      - run: npm ci
+
+      - name: Build
+        env:
+          APPIMAGE_EXTRACT_AND_RUN: 1
+        run: npx tauri build --target ${{ matrix.target }} --bundles ${{ matrix.bundles }}
+
+      - name: Portable zip (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $ver = (Get-Content src-tauri/tauri.conf.json | ConvertFrom-Json).version
+          $rel = "src-tauri/target/${{ matrix.target }}/release"
+          $dir = "$env:RUNNER_TEMP/Disk Guardian"
+          New-Item -ItemType Directory -Force $dir | Out-Null
+          Copy-Item "$rel/disk-guardian.exe", "$rel/smartctl.exe", "../LICENSE" $dir
+          @"
+          Disk Guardian $ver (portable)
+
+          Run disk-guardian.exe. On first start press "Install service": the small background
+          service that reads the disks needs administrator rights once. Settings are kept in
+          your user profile. The portable version does not update itself: download new
+          versions from the releases page.
+
+          To remove it, run this as administrator, then delete the folder:
+            disk-guardian.exe --uninstall-service
+
+          https://github.com/astatinestudio/disk-guardian
+          "@ | Set-Content -Encoding utf8 "$dir/README.txt"
+          New-Item -ItemType Directory -Force "$env:BUNDLE/portable" | Out-Null
+          Compress-Archive -Path $dir -DestinationPath "$env:BUNDLE/portable/Disk Guardian_${ver}_${{ matrix.arch }}-portable.zip" -Force
+
+      # self-updater (src-tauri/src/updater.rs) installs the .app from a tar.gz
+      - name: App archive (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          VER=$(node -p "require('./src-tauri/tauri.conf.json').version")
+          cd "$BUNDLE/macos"
+          tar -czf "Disk Guardian_${VER}_${{ matrix.arch }}.app.tar.gz" "Disk Guardian.app"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: disk-guardian-${{ matrix.name }}
+          path: |
+            desktop/${{ env.BUNDLE }}/nsis/*.exe
+            desktop/${{ env.BUNDLE }}/portable/*.zip
+            desktop/${{ env.BUNDLE }}/dmg/*.dmg
+            desktop/${{ env.BUNDLE }}/macos/*.app.tar.gz
+            desktop/${{ env.BUNDLE }}/deb/*.deb
+            desktop/${{ env.BUNDLE }}/rpm/*.rpm
+            desktop/${{ env.BUNDLE }}/appimage/*.AppImage
+          if-no-files-found: error
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Check the tag matches the app version
+        run: |
+          VER=$(node -p "require('./desktop/src-tauri/tauri.conf.json').version")
+          CARGO=$(sed -n 's/^version = "\(.*\)"/\1/p' desktop/src-tauri/Cargo.toml | head -1)
+          [ "v$VER" = "$GITHUB_REF_NAME" ] || { echo "::error::tag $GITHUB_REF_NAME but tauri.conf.json says $VER"; exit 1; }
+          [ "$VER" = "$CARGO" ] || { echo "::error::Cargo.toml version $CARGO differs from tauri.conf.json $VER"; exit 1; }
+
+      - name: Sign and pack
+        env:
+          UPDATE_SIGNING_KEY: ${{ secrets.UPDATE_SIGNING_KEY }}
+        run: |
+          [ -n "$UPDATE_SIGNING_KEY" ] || { echo "::error::the UPDATE_SIGNING_KEY secret is not set"; exit 1; }
+          export DISKGUARDIAN_SIGNING_KEY="$RUNNER_TEMP/key.pem"
+          printf '%s\n' "$UPDATE_SIGNING_KEY" > "$DISKGUARDIAN_SIGNING_KEY"
+          node desktop/scripts/release.mjs pack artifacts --notes-file "release-notes/$GITHUB_REF_NAME.json"
+          rm -f "$DISKGUARDIAN_SIGNING_KEY"
+
+      - name: Publish the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          node -e '
+            const fs = require("fs"), tag = process.env.GITHUB_REF_NAME;
+            const f = `release-notes/${tag}.json`;
+            const n = fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, "utf8")) : {};
+            let md = "";
+            if (n.en) md += n.en + "\n\n";
+            if (n.fa) md += `<div dir="rtl">\n\n${n.fa}\n\n</div>\n\n`;
+            md += "**Which file?** See the [download guide](https://github.com/" + process.env.GITHUB_REPOSITORY + "#download). ";
+            md += "Every file is listed in `SHA256SUMS.txt`, signed in `SHA256SUMS.txt.sig`.\n";
+            fs.writeFileSync(process.env.RUNNER_TEMP + "/notes.md", md);'
+          gh release create "$GITHUB_REF_NAME" release/$GITHUB_REF_NAME/* \
+            --title "Disk Guardian ${GITHUB_REF_NAME#v}" --notes-file "$RUNNER_TEMP/notes.md" --verify-tag
+
+      # last step: installed apps see the new version only once the files are online
+      - name: Announce the update (updates.json)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add updates.json
+          git commit -m "Release ${GITHUB_REF_NAME#v}: updates.json"
+          git push origin HEAD:main

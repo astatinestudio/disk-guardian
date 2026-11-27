@@ -1,0 +1,108 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Disk Guardian",
+  "mainBinaryName": "disk-guardian",
+  "version": "1.5.0",
+  "identifier": "io.github.diskguardian.DiskGuardian",
+  "build": {
+    "frontendDist": "../ui",
+    "beforeDevCommand": "node scripts/sync-shared.mjs && node scripts/fetch-smartctl.mjs",
+    "beforeBuildCommand": "node scripts/sync-shared.mjs && node scripts/fetch-smartctl.mjs"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "macOSPrivateApi": true,
+    "windows": [],
+    "security": {
+      "csp": "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src ipc: http://ipc.localhost"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "category": "Utility",
+    "shortDescription": "Disk health, SMART data and live temperature",
+    "longDescription": "Health score, full SMART attributes, NVMe health log, SAS counters, power-on hours and live temperature of every disk (HDD, SSD, NVMe, SAS, USB flash). Tray icon, floating widget, Windows taskbar widget; on Linux a GNOME Shell panel extension, partitions and btrfs error tracking.",
+    "copyright": "Copyright (c) 2026 Reza Ardi",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "windows": {
+      "nsis": {
+        "installMode": "perMachine",
+        "installerHooks": "windows/hooks.nsh"
+      }
+    },
+    "macOS": {
+      "minimumSystemVersion": "10.15"
+    },
+    "linux": {
+      "deb": {
+        "depends": [
+          "smartmontools (>= 7.0)",
+          "curl"
+        ],
+        "recommends": [
+          "btrfs-progs"
+        ],
+        "conflicts": [
+          "disk-health",
+          "linuxhealth"
+        ],
+        "replaces": [
+          "disk-health",
+          "linuxhealth"
+        ],
+        "files": {
+          "/usr/lib/systemd/system/disk-guardian.service": "linux/disk-guardian.service",
+          "/etc/diskguardian/collector.conf": "linux/collector.conf",
+          "/usr/lib/modules-load.d/disk-guardian-drivetemp.conf": "linux/drivetemp.conf",
+          "/usr/bin/dg-top": "linux/dg-top",
+          "/usr/share/gnome-shell/extensions/disk-guardian@diskguardian": "../../extension",
+          "/usr/share/glib-2.0/schemas/org.gnome.shell.extensions.diskguardian.gschema.xml": "../../extension/schemas/org.gnome.shell.extensions.diskguardian.gschema.xml",
+          "/usr/share/fonts/truetype/diskguardian": "../ui/fonts"
+        },
+        "preInstallScript": "linux/preinst",
+        "postInstallScript": "linux/postinst",
+        "preRemoveScript": "linux/prerm",
+        "postRemoveScript": "linux/postrm"
+      },
+      "rpm": {
+        "depends": [
+          "smartmontools",
+          "curl"
+        ],
+        "conflicts": [
+          "disk-health"
+        ],
+        "obsoletes": [
+          "disk-health"
+        ],
+        "files": {
+          "/usr/lib/systemd/system/disk-guardian.service": "linux/disk-guardian.service",
+          "/etc/diskguardian/collector.conf": "linux/collector.conf",
+          "/usr/lib/modules-load.d/disk-guardian-drivetemp.conf": "linux/drivetemp.conf",
+          "/usr/bin/dg-top": "linux/dg-top",
+          "/usr/share/gnome-shell/extensions/disk-guardian@diskguardian": "../../extension",
+          "/usr/share/glib-2.0/schemas/org.gnome.shell.extensions.diskguardian.gschema.xml": "../../extension/schemas/org.gnome.shell.extensions.diskguardian.gschema.xml",
+          "/usr/share/fonts/truetype/diskguardian": "../ui/fonts"
+        },
+        "preInstallScript": "linux/rpm-pre",
+        "postInstallScript": "linux/rpm-post",
+        "preRemoveScript": "linux/rpm-preun",
+        "postRemoveScript": "linux/rpm-postun"
+      },
+      "appimage": {
+        "bundleMediaFramework": false
+      }
+    },
+    "license": "MIT",
+    "licenseFile": "../../LICENSE",
+    "publisher": "Reza Ardi",
+    "homepage": "https://github.com/astatinestudio/disk-guardian"
+  }
+}

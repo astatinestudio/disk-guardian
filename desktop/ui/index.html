@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Disk Guardian</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="app">
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark"><span class="ico" style="--i:url(/icons/hdd.svg)"></span></span>
+      <div><h1 data-i18n="Disk Guardian">Disk Guardian</h1><p id="status-line"></p></div>
+    </div>
+    <button id="btn-refresh" class="icon-btn" data-i18n-title="Refresh now"><span class="ico" style="--i:url(/icons/refresh.svg)"></span></button>
+    <button id="btn-settings" class="icon-btn" data-i18n-title="Settings"><span class="ico" style="--i:url(/icons/settings.svg)"></span></button>
+    <div class="win-ctl">
+      <button id="win-min" data-i18n-title="Minimize"><span class="ico" style="--i:url(/icons/win-min.svg)"></span></button>
+      <button id="win-max" data-i18n-title="Maximize"><span class="ico" style="--i:url(/icons/win-max.svg)"></span></button>
+      <button id="win-close" class="win-close" data-i18n-title="Close"><span class="ico" style="--i:url(/icons/close.svg)"></span></button>
+    </div>
+  </header>
+  <div id="banner" class="banner" hidden></div>
+  <div id="notices" class="notices" hidden></div>
+  <main class="layout">
+    <aside id="disk-list" class="disk-list"></aside>
+    <section id="detail" class="detail"></section>
+  </main>
+  <dialog id="settings-dlg"></dialog>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "disk-guardian-desktop",
+  "private": true,
+  "version": "1.4.0",
+  "type": "module",
+  "scripts": {
+    "sync": "node scripts/sync-shared.mjs",
+    "dev": "tauri dev",
+    "build": "tauri build",
+    "tauri": "tauri",
+    "test": "node --test tests/normalize.test.mjs"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.5.0"
+  }
+}

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.diskguardian" path="/org/gnome/shell/extensions/diskguardian/">
+
+    <!-- General -->
+    <key name="language" type="s">
+      <default>'auto'</default>
+      <summary>UI language: auto or a language code (ar, de, en, es, fa, fr, hi, id, it, ja, ko, nl, pl, pt, ru, tr, uk, vi, zh)</summary>
+    </key>
+    <key name="poll-interval" type="i">
+      <range min="1" max="60"/>
+      <default>3</default>
+      <summary>Seconds between reads of the collector state file</summary>
+    </key>
+    <key name="temp-unit" type="s">
+      <default>'C'</default>
+      <summary>Temperature unit: C or F</summary>
+    </key>
+    <key name="disk-aliases" type="a{ss}">
+      <default>{}</default>
+      <summary>Custom display names (disk key to alias)</summary>
+    </key>
+    <key name="hidden-disks" type="as">
+      <default>[]</default>
+      <summary>Disk keys hidden from the panel</summary>
+    </key>
+
+    <!-- Panel -->
+    <key name="panel-mode" type="s">
+      <default>'all'</default>
+      <summary>Panel display: all, max, default, icon</summary>
+    </key>
+    <key name="panel-show-names" type="b">
+      <default>true</default>
+      <summary>Show disk names next to temperatures in the panel</summary>
+    </key>
+    <key name="panel-colorize" type="b">
+      <default>true</default>
+      <summary>Color temperatures by level in the panel</summary>
+    </key>
+    <key name="panel-position" type="s">
+      <default>'right'</default>
+      <summary>Panel box: left, center, right</summary>
+    </key>
+
+    <!-- Floating widget -->
+    <key name="default-disk" type="s">
+      <default>''</default>
+      <summary>Key of the default disk (floating widget, panel default mode)</summary>
+    </key>
+    <key name="float-enabled" type="b">
+      <default>false</default>
+      <summary>Show the floating widget</summary>
+    </key>
+    <key name="float-x" type="i">
+      <default>-1</default>
+      <summary>Floating widget X position (-1 = automatic)</summary>
+    </key>
+    <key name="float-y" type="i">
+      <default>-1</default>
+      <summary>Floating widget Y position (-1 = automatic)</summary>
+    </key>
+    <key name="float-opacity" type="i">
+      <range min="30" max="100"/>
+      <default>94</default>
+      <summary>Floating widget opacity in percent</summary>
+    </key>
+    <key name="float-compact" type="b">
+      <default>false</default>
+      <summary>Compact floating widget</summary>
+    </key>
+    <key name="float-expanded" type="b">
+      <default>false</default>
+      <summary>Show every SMART value in the floating widget</summary>
+    </key>
+    <key name="float-locked" type="b">
+      <default>false</default>
+      <summary>Lock floating widget position</summary>
+    </key>
+    <key name="float-hide-overview" type="b">
+      <default>true</default>
+      <summary>Hide the floating widget in the overview</summary>
+    </key>
+
+    <!-- Alerts -->
+    <key name="notify-enabled" type="b">
+      <default>true</default>
+      <summary>Send desktop notifications</summary>
+    </key>
+    <key name="notify-temp" type="b">
+      <default>true</default>
+      <summary>Notify on high temperature</summary>
+    </key>
+    <key name="notify-health" type="b">
+      <default>true</default>
+      <summary>Notify when disk health gets worse</summary>
+    </key>
+    <key name="temp-warn-hdd" type="i"><default>50</default><summary>HDD warning temperature (C)</summary></key>
+    <key name="temp-crit-hdd" type="i"><default>58</default><summary>HDD critical temperature (C)</summary></key>
+    <key name="temp-warn-ssd" type="i"><default>60</default><summary>SATA SSD warning temperature (C)</summary></key>
+    <key name="temp-crit-ssd" type="i"><default>70</default><summary>SATA SSD critical temperature (C)</summary></key>
+    <key name="temp-warn-nvme" type="i"><default>65</default><summary>NVMe warning temperature (C)</summary></key>
+    <key name="temp-crit-nvme" type="i"><default>78</default><summary>NVMe critical temperature (C)</summary></key>
+  </schema>
+</schemalist>

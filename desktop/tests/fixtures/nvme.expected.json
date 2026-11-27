@@ -1,0 +1,90 @@
+{
+  "protocol": "NVMe",
+  "dev_type": "nvme",
+  "model": "BC711 NVMe SK hynix 256GB",
+  "model_family": null,
+  "vendor": null,
+  "serial": "CY0AN123456789",
+  "firmware": "11002111",
+  "capacity": 256060514304,
+  "rotation_rate": null,
+  "form_factor": null,
+  "sata_version": null,
+  "link_speed": null,
+  "max_link_speed": null,
+  "nvme_version": "1.3",
+  "transport": null,
+  "smart": {
+    "available": true,
+    "enabled": true,
+    "passed": true,
+    "error": null,
+    "standby": false
+  },
+  "power_on_hours": 6366,
+  "power_cycles": 874,
+  "attributes": [],
+  "nvme": {
+    "critical_warning": 0,
+    "temperature": 30,
+    "available_spare": 100,
+    "available_spare_threshold": 5,
+    "percentage_used": 1,
+    "data_units_read": 20312500,
+    "data_units_written": 20312500,
+    "host_reads": 300000000,
+    "host_writes": 400000000,
+    "controller_busy_time": 1200,
+    "power_cycles": 874,
+    "power_on_hours": 6366,
+    "unsafe_shutdowns": 151,
+    "media_errors": 0,
+    "num_err_log_entries": 12,
+    "warning_temp_time": 0,
+    "critical_comp_time": 0,
+    "temperature_sensors": [
+      30,
+      32
+    ]
+  },
+  "scsi": null,
+  "counters": {
+    "critical_warning": 0,
+    "media_errors": 0,
+    "num_err_log_entries": 12,
+    "unsafe_shutdowns": 151,
+    "available_spare": 100,
+    "available_spare_threshold": 5
+  },
+  "life_remaining": 99,
+  "life_source": "nvme",
+  "data_written": 10400000000000,
+  "data_read": 10400000000000,
+  "data_approx": false,
+  "self_tests": [
+    {
+      "type": "Short",
+      "status": "Completed without error",
+      "passed": true,
+      "hours": 6000
+    }
+  ],
+  "self_test": {
+    "running": false,
+    "text": null,
+    "remaining": null
+  },
+  "temperature": {
+    "current": 30,
+    "lifetime_max": null,
+    "lifetime_min": null,
+    "warn_limit": 84,
+    "crit_limit": 85
+  },
+  "kind": "nvme",
+  "health": {
+    "score": 99,
+    "level": "good",
+    "issues": []
+  }
+}

@@ -1,0 +1,23 @@
+#!/bin/sh
+set -e
+case "$1" in
+    remove|purge)
+        # drop per-user links created by postinst (they would dangle now)
+        for l in /home/*/.local/share/gnome-shell/extensions/disk-guardian@diskguardian \
+                 /root/.local/share/gnome-shell/extensions/disk-guardian@diskguardian; do
+            if [ -L "$l" ] && [ "$(readlink "$l")" = /usr/share/gnome-shell/extensions/disk-guardian@diskguardian ]; then
+                rm -f "$l"
+            fi
+        done
+        if [ -d /run/systemd/system ]; then
+            systemctl daemon-reload >/dev/null 2>&1 || true
+        fi
+        glib-compile-schemas /usr/share/glib-2.0/schemas >/dev/null 2>&1 || true
+        fc-cache -f >/dev/null 2>&1 || true
+        ;;
+esac
+if [ "$1" = "purge" ]; then
+    rm -rf /var/lib/diskguardian /run/diskguardian
+    rmdir /etc/diskguardian 2>/dev/null || true
+fi
+exit 0

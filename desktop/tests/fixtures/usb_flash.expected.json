@@ -1,0 +1,58 @@
+{
+  "protocol": "SCSI",
+  "dev_type": "scsi",
+  "model": "USB SanDisk 3.2Gen1",
+  "model_family": null,
+  "vendor": "USB",
+  "serial": null,
+  "firmware": "1.00",
+  "capacity": 61530439680,
+  "rotation_rate": null,
+  "form_factor": null,
+  "sata_version": null,
+  "link_speed": null,
+  "max_link_speed": null,
+  "nvme_version": null,
+  "transport": null,
+  "smart": {
+    "available": true,
+    "enabled": true,
+    "passed": true,
+    "error": null,
+    "standby": false
+  },
+  "power_on_hours": null,
+  "power_cycles": null,
+  "attributes": [],
+  "nvme": null,
+  "scsi": {
+    "start_stop_cycles": null,
+    "load_unload_cycles": null,
+    "specified_start_stop": null
+  },
+  "counters": {},
+  "life_remaining": null,
+  "life_source": null,
+  "data_written": null,
+  "data_read": null,
+  "data_approx": false,
+  "self_tests": [],
+  "self_test": {
+    "running": false,
+    "text": null,
+    "remaining": null
+  },
+  "temperature": {
+    "current": null,
+    "lifetime_max": null,
+    "lifetime_min": null,
+    "warn_limit": null,
+    "crit_limit": null
+  },
+  "kind": "sas",
+  "health": {
+    "score": 100,
+    "level": "good",
+    "issues": []
+  }
+}

@@ -1,0 +1,7 @@
+#!/bin/sh
+# RPM %pre ($1: 1 = install, 2 = upgrade). Stops the collector of the app's former name.
+if [ -d /run/systemd/system ]; then
+    systemctl disable --now disk-health.service >/dev/null 2>&1 || true
+fi
+rm -f /etc/systemd/system/disk-health.service
+exit 0

@@ -1,0 +1,24 @@
+#!/bin/sh
+# RPM %post ($1: 1 = install, 2 = upgrade)
+UUID=disk-guardian@diskguardian
+SYS=/usr/share/gnome-shell/extensions/$UUID
+# per-user copies of the extension would shadow the packaged one
+for d in /home/*/.local/share/gnome-shell/extensions/$UUID /root/.local/share/gnome-shell/extensions/$UUID; do
+    if [ -d "$d" ] && [ ! -L "$d" ]; then
+        rm -rf "$d"
+        ln -s "$SYS" "$d"
+    fi
+done
+modprobe drivetemp >/dev/null 2>&1 || true
+glib-compile-schemas /usr/share/glib-2.0/schemas >/dev/null 2>&1 || true
+fc-cache -f /usr/share/fonts/truetype/diskguardian >/dev/null 2>&1 || true
+if [ -d /run/systemd/system ]; then
+    systemctl daemon-reload >/dev/null 2>&1 || true
+    systemctl enable disk-guardian.service >/dev/null 2>&1 || true
+    systemctl restart disk-guardian.service >/dev/null 2>&1 || \
+        echo "Disk Guardian: the collector did not start, see: journalctl -u disk-guardian"
+fi
+if [ "$1" = 1 ]; then
+    echo "Disk Guardian is installed. Open it from the applications menu; on GNOME log out and back in once."
+fi
+exit 0

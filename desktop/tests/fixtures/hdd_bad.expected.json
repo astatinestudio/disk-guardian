@@ -1,0 +1,194 @@
+{
+  "protocol": "ATA",
+  "dev_type": "ata",
+  "model": "WDC WD10EZEX-08WN4A0",
+  "model_family": "Western Digital Blue",
+  "vendor": null,
+  "serial": "WD-WCC6Y0ABCDEF",
+  "firmware": "01.01A01",
+  "capacity": 1000204886016,
+  "rotation_rate": 7200,
+  "form_factor": null,
+  "sata_version": null,
+  "link_speed": null,
+  "max_link_speed": null,
+  "nvme_version": null,
+  "transport": null,
+  "smart": {
+    "available": true,
+    "enabled": true,
+    "passed": true,
+    "error": null,
+    "standby": false
+  },
+  "power_on_hours": 41000,
+  "power_cycles": 3100,
+  "attributes": [
+    {
+      "id": 1,
+      "name": "Raw_Read_Error_Rate",
+      "value": 200,
+      "worst": 200,
+      "thresh": 51,
+      "raw": "120",
+      "raw_value": 120,
+      "when_failed": "past",
+      "prefail": true,
+      "status": "warn"
+    },
+    {
+      "id": 5,
+      "name": "Reallocated_Sector_Ct",
+      "value": 180,
+      "worst": 180,
+      "thresh": 140,
+      "raw": "160",
+      "raw_value": 160,
+      "when_failed": null,
+      "prefail": true,
+      "status": "warn"
+    },
+    {
+      "id": 10,
+      "name": "Spin_Retry_Count",
+      "value": 100,
+      "worst": 253,
+      "thresh": 0,
+      "raw": "2",
+      "raw_value": 2,
+      "when_failed": null,
+      "prefail": false,
+      "status": "warn"
+    },
+    {
+      "id": 197,
+      "name": "Current_Pending_Sector",
+      "value": 200,
+      "worst": 200,
+      "thresh": 0,
+      "raw": "14",
+      "raw_value": 14,
+      "when_failed": null,
+      "prefail": false,
+      "status": "warn"
+    },
+    {
+      "id": 198,
+      "name": "Offline_Uncorrectable",
+      "value": 200,
+      "worst": 200,
+      "thresh": 0,
+      "raw": "3",
+      "raw_value": 3,
+      "when_failed": null,
+      "prefail": false,
+      "status": "warn"
+    }
+  ],
+  "nvme": null,
+  "scsi": null,
+  "counters": {
+    "reallocated": 160,
+    "spin_retry": 2,
+    "pending": 14,
+    "offline_uncorrectable": 3,
+    "error_log_entries": 7
+  },
+  "life_remaining": null,
+  "life_source": null,
+  "data_written": null,
+  "data_read": null,
+  "data_approx": false,
+  "self_tests": [
+    {
+      "type": "Extended offline",
+      "status": "Completed: read failure",
+      "passed": false,
+      "hours": 40990
+    },
+    {
+      "type": "Short offline",
+      "status": "Completed without error",
+      "passed": true,
+      "hours": 40000
+    }
+  ],
+  "self_test": {
+    "running": true,
+    "text": "in progress, 90% remaining",
+    "remaining": 90
+  },
+  "temperature": {
+    "current": 57,
+    "lifetime_max": 63,
+    "lifetime_min": 15,
+    "warn_limit": 55,
+    "crit_limit": 60
+  },
+  "kind": "hdd",
+  "health": {
+    "score": 0,
+    "level": "critical",
+    "issues": [
+      {
+        "severity": "critical",
+        "code": "reallocated",
+        "params": {
+          "count": 160
+        }
+      },
+      {
+        "severity": "critical",
+        "code": "pending",
+        "params": {
+          "count": 14
+        }
+      },
+      {
+        "severity": "critical",
+        "code": "selftest_failed",
+        "params": {
+          "type": "Extended offline",
+          "hours": 40990
+        }
+      },
+      {
+        "severity": "warning",
+        "code": "attr_failed_past",
+        "params": {
+          "name": "Raw_Read_Error_Rate",
+          "id": 1
+        }
+      },
+      {
+        "severity": "warning",
+        "code": "uncorrectable",
+        "params": {
+          "count": 3
+        }
+      },
+      {
+        "severity": "warning",
+        "code": "spin_retry",
+        "params": {
+          "count": 2
+        }
+      },
+      {
+        "severity": "warning",
+        "code": "temp_high",
+        "params": {
+          "temp": 57,
+          "limit": 55
+        }
+      },
+      {
+        "severity": "info",
+        "code": "error_log",
+        "params": {
+          "count": 7
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "en": "First public release of Disk Guardian: SMART health score, live temperature, alerts and self-tests for every disk on Windows (x64, x86, ARM64), macOS (Apple silicon, Intel) and Linux (deb, rpm, AppImage; x64 and ARM64). 19 languages, automatic signed updates.",
+  "fa": "اولین نسخه‌ی عمومی Disk Guardian: امتیاز سلامت SMART، دمای زنده، هشدارها و خودآزمایی برای همه‌ی دیسک‌ها روی ویندوز (x64، x86، ARM64)، مک (Apple silicon و اینتل) و لینوکس (deb، rpm و AppImage؛ x64 و ARM64). ۱۹ زبان و به‌روزرسانی خودکار امضاشده.",
+  "mandatory": false
+}
