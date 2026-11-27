@@ -1,0 +1,58 @@
+# Uploads the binaries of a finished build run to a draft release that was signed locally.
+#
+# Signing stays on the maintainer's machine (scripts/release.mjs pack), which only uploads the small
+# SHA256SUMS.txt + SHA256SUMS.txt.sig to the draft. This workflow copies the big files from the
+# build run's artifacts on GitHub's own network, checks each one against that signed list, and
+# uploads it. Then the maintainer publishes the draft and pushes updates.json.
+#
+#   gh workflow run publish.yml -f run_id=<build run id> -f tag=v1.6.0
+name: publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: Build run (desktop workflow) whose artifacts to upload
+        required: true
+      tag:
+        description: Draft release tag, e.g. v1.6.0 (must already hold SHA256SUMS.txt)
+        required: true
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAG: ${{ inputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: ${{ inputs.run_id }}
+          github-token: ${{ github.token }}
+          path: artifacts
+
+      - name: Stable file names
+        run: |
+          VER=$(node -p "require('./desktop/src-tauri/tauri.conf.json').version")
+          [ "v$VER" = "$TAG" ] || { echo "::error::tag $TAG but tauri.conf.json says $VER"; exit 1; }
+          node desktop/scripts/release.mjs pack artifacts --files-only
+
+      - name: Check every file against the signed SHA256SUMS.txt
+        working-directory: release/${{ inputs.tag }}
+        run: |
+          gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --pattern SHA256SUMS.txt --clobber
+          sha256sum --check --strict SHA256SUMS.txt
+          [ "$(ls Disk-Guardian-* | wc -l)" = "$(wc -l < SHA256SUMS.txt)" ] || { echo "::error::file count differs"; exit 1; }
+
+      - name: Upload to the draft release
+        run: gh release upload "$TAG" release/$TAG/Disk-Guardian-* --repo "$GITHUB_REPOSITORY" --clobber

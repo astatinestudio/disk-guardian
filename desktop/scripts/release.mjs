@@ -105,7 +105,10 @@ function pack(args) {
     const src = args[0];
     if (!src || !fs.existsSync(src))
         die('usage: node scripts/release.mjs pack <artifacts-dir> [--mandatory] [--notes-en ".."] [--notes-fa ".."]');
-    if (!fs.existsSync(KEY))
+    // --files-only: just the stable file names (CI uploads the binaries of a release that was
+    // signed on the maintainer's machine; .github/workflows/publish.yml)
+    const filesOnly = args.includes('--files-only');
+    if (!filesOnly && !fs.existsSync(KEY))
         die(`no signing key at ${KEY} (run: node scripts/release.mjs keygen)`);
     const version = JSON.parse(fs.readFileSync(path.join(desktop, 'src-tauri', 'tauri.conf.json'), 'utf8')).version;
     const repo = process.env.DISKGUARDIAN_REPO
@@ -129,6 +132,8 @@ function pack(args) {
     }
     if (!Object.keys(platforms).length)
         die(`no installers found in ${src}`);
+    if (filesOnly)
+        return;
 
     const sums = fs.readdirSync(out).sort().map(n =>
         `${crypto.createHash('sha256').update(fs.readFileSync(path.join(out, n))).digest('hex')}  ${n}`).join('\n') + '\n';

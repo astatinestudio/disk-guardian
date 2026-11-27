@@ -104,7 +104,7 @@ file. The app installs only files whose hash appears in a correctly signed list.
 
 **Every release:**
 1. Raise the version in `desktop/src-tauri/tauri.conf.json` **and** `desktop/src-tauri/Cargo.toml`, and the date in `extension/lib/about.js`.
-2. Optionally add `release-notes/v<version>.json`, for example `{"en": "…", "fa": "…", "mandatory": false}`.
+2. Add `release-notes/v<version>.json` with one note per app language (`en`, `fa`, `ar`, … all 19 codes of `extension/lib/i18n.js`; the app falls back to English) and `"mandatory": false`.
 3. Commit, then tag and push: `git tag v<version> && git push origin main --tags`.
 
 The workflow builds every target. Its `release` job then:
