@@ -74,10 +74,23 @@ async function windows(target, bits) {
 }
 
 function macos(target) {
-    const prefix = execFileSync('brew', ['--prefix'], {encoding: 'utf8'}).trim();
-    const src = path.join(prefix, 'sbin', 'smartctl');
-    if (!existsSync(src))
-        throw new Error('smartctl not found: brew install smartmontools');
+    const run = (cmd, args) => {
+        try {
+            return execFileSync(cmd, args, {encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore']}).trim();
+        } catch {
+            return '';
+        }
+    };
+    // Homebrew has put smartctl in sbin/ and, in newer versions, bin/; also try the keg and PATH
+    const prefixes = [run('brew', ['--prefix', 'smartmontools']), run('brew', ['--prefix']), '/opt/homebrew', '/usr/local'].filter(Boolean);
+    const candidates = [
+        ...prefixes.flatMap(p => [path.join(p, 'sbin', 'smartctl'), path.join(p, 'bin', 'smartctl')]),
+        run('/bin/sh', ['-c', 'command -v smartctl']),
+    ].filter(Boolean);
+    const src = candidates.find(p => existsSync(p));
+    if (!src)
+        throw new Error(`smartctl not found (brew install smartmontools); looked in: ${candidates.join(', ')}`);
+    console.log(`fetch-smartctl: using ${src}`);
     copyFileSync(src, target);
     chmodSync(target, 0o755);
 }
