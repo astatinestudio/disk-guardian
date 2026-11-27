@@ -10,7 +10,7 @@
 [![Release](https://img.shields.io/github/v/release/astatinestudio/disk-guardian?style=flat-square&label=release&color=2f6feb)](https://github.com/astatinestudio/disk-guardian/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/astatinestudio/disk-guardian/total?style=flat-square&label=downloads&color=2f6feb)](https://github.com/astatinestudio/disk-guardian/releases)
 [![Build](https://img.shields.io/github/actions/workflow/status/astatinestudio/disk-guardian/desktop.yml?style=flat-square&label=build)](https://github.com/astatinestudio/disk-guardian/actions/workflows/desktop.yml)
-[![License](https://img.shields.io/github/license/astatinestudio/disk-guardian?style=flat-square&color=2f6feb)](../../LICENSE)
+[![License](https://img.shields.io/github/license/astatinestudio/disk-guardian?style=flat-square&color=0cf)](../../LICENSE)
 [![Platforms](https://img.shields.io/badge/platforms-Windows%20·%20macOS%20·%20Linux-555?style=flat-square)](#download)
 
 [Скачать](#download) · [Возможности](#features) · [Как это работает](#how-it-works) · [Вопросы и ответы](#faq) · [Разработка](../DEVELOPMENT.md)
