@@ -27,7 +27,7 @@
 通常会在故障发生前几周就出现在磁盘自身的 SMART 数据中。**Disk Guardian** 读取电脑中每块磁盘的这些数据，
 将其转化为一个健康评分，并用通俗的语言加以解释。它实时监测温度，并在情况变化时提醒你。
 
-它免费且开源（MIT 许可证），可在 Windows 10/11（x64、ARM64、x86）、macOS 10.15+ 以及几乎所有 Linux 发行版上运行。
+它免费且开源（GPL-3.0 许可证），可在 Windows 10/11（x64、ARM64、x86）、macOS 10.15+ 以及几乎所有 Linux 发行版上运行。
 
 ## 亮点
 
@@ -246,5 +246,5 @@ sudo systemctl restart disk-guardian  # 使 /etc/diskguardian/collector.conf 的
 ---
 
 <div align="center">
-<sub>由 <b>Reza Ardi</b> 开发 · 创建于 2026 年 11 月 15 日 · 最后更新于 2026 年 11 月 27 日<br>以 <a href="../../LICENSE">MIT 许可证</a>发布</sub>
+<sub>由 <b>Reza Ardi</b> 开发 · 创建于 2026 年 11 月 15 日 · 最后更新于 2026 年 11 月 27 日<br>以 <a href="../../LICENSE">GNU GPL v3 许可证</a>发布</sub>
 </div>

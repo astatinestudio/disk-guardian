@@ -28,7 +28,7 @@ keeps running hot usually show up in the drive's own SMART data weeks before som
 **Disk Guardian** reads that data for every disk in your computer and turns it into a single health score
 with a plain-language explanation. It watches the temperature live and tells you when something changes.
 
-It is free and open source (MIT), and runs on Windows 10/11 (x64, ARM64, x86), macOS 10.15+ and practically every Linux distribution.
+It is free and open source (GPL-3.0), and runs on Windows 10/11 (x64, ARM64, x86), macOS 10.15+ and practically every Linux distribution.
 
 ## Highlights
 
@@ -251,5 +251,5 @@ from native speakers are especially welcome. `node desktop/scripts/check-locales
 ---
 
 <div align="center">
-<sub>Created by <b>Reza Ardi</b> · created November 15, 2026 · last updated November 27, 2026<br>Released under the <a href="LICENSE">MIT License</a></sub>
+<sub>Created by <b>Reza Ardi</b> · created November 15, 2026 · last updated November 27, 2026<br>Released under the <a href="LICENSE">GNU General Public License v3.0</a></sub>
 </div>

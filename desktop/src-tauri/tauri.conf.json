@@ -100,7 +100,7 @@
         "bundleMediaFramework": false
       }
     },
-    "license": "MIT",
+    "license": "GPL-3.0-or-later",
     "licenseFile": "../../LICENSE",
     "publisher": "Reza Ardi",
     "homepage": "https://github.com/astatinestudio/disk-guardian"

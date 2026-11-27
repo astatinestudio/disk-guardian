@@ -4,7 +4,7 @@ version = "1.5.0"
 description = "Disk health monitor: SMART, power-on hours and live temperature of every disk"
 edition = "2021"
 rust-version = "1.77"
-license = "MIT"
+license = "GPL-3.0-or-later"
 authors = ["Reza Ardi"]
 repository = "https://github.com/astatinestudio/disk-guardian"
 
