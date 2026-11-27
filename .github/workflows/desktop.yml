@@ -166,17 +166,34 @@ jobs:
           [ "v$VER" = "$GITHUB_REF_NAME" ] || { echo "::error::tag $GITHUB_REF_NAME but tauri.conf.json says $VER"; exit 1; }
           [ "$VER" = "$CARGO" ] || { echo "::error::Cargo.toml version $CARGO differs from tauri.conf.json $VER"; exit 1; }
 
+      # Without the UPDATE_SIGNING_KEY secret (the key kept only on the maintainer's machine) the
+      # release is signed and published locally instead: scripts/release.mjs pack + gh release create.
+      - name: Signing key available?
+        id: key
+        env:
+          UPDATE_SIGNING_KEY: ${{ secrets.UPDATE_SIGNING_KEY }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "::notice::release $GITHUB_REF_NAME is already published"; echo "go=false" >> "$GITHUB_OUTPUT"
+          elif [ -z "$UPDATE_SIGNING_KEY" ]; then
+            echo "::notice::no UPDATE_SIGNING_KEY secret: sign and publish locally (docs/DEVELOPMENT.md)"; echo "go=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "go=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Sign and pack
+        if: steps.key.outputs.go == 'true'
         env:
           UPDATE_SIGNING_KEY: ${{ secrets.UPDATE_SIGNING_KEY }}
         run: |
-          [ -n "$UPDATE_SIGNING_KEY" ] || { echo "::error::the UPDATE_SIGNING_KEY secret is not set"; exit 1; }
           export DISKGUARDIAN_SIGNING_KEY="$RUNNER_TEMP/key.pem"
           printf '%s\n' "$UPDATE_SIGNING_KEY" > "$DISKGUARDIAN_SIGNING_KEY"
           node desktop/scripts/release.mjs pack artifacts --notes-file "release-notes/$GITHUB_REF_NAME.json"
           rm -f "$DISKGUARDIAN_SIGNING_KEY"
 
       - name: Publish the GitHub release
+        if: steps.key.outputs.go == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -195,6 +212,7 @@ jobs:
 
       # last step: installed apps see the new version only once the files are online
       - name: Announce the update (updates.json)
+        if: steps.key.outputs.go == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
